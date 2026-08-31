@@ -172,6 +172,37 @@ describe('POST /api/polls/:id/vote', () => {
     expect((await request(app).post(`/api/polls/${pollB}/vote`).send({ username: 'gal', optionId: b.body.options[0].id })).status).toBe(201);
   });
 
+  // Normalisation tests. These pin down the decision that "Gal", "gal" and " gal " are
+  // all the same voter — the kind of rule that is easy to break by accident later.
+  it('treats usernames as case-insensitive', async () => {
+    const id = await createPoll();
+    const detail = await request(app).get(`/api/polls/${id}`);
+    const [first, second] = detail.body.options;
+
+    expect((await request(app).post(`/api/polls/${id}/vote`).send({ username: 'Gal', optionId: first.id })).status).toBe(201);
+    expect((await request(app).post(`/api/polls/${id}/vote`).send({ username: 'gal', optionId: second.id })).status).toBe(409);
+  });
+
+  it('treats surrounding whitespace as the same username', async () => {
+    const id = await createPoll();
+    const detail = await request(app).get(`/api/polls/${id}`);
+    const [first, second] = detail.body.options;
+
+    expect((await request(app).post(`/api/polls/${id}/vote`).send({ username: 'gal', optionId: first.id })).status).toBe(201);
+    expect((await request(app).post(`/api/polls/${id}/vote`).send({ username: '  gal  ', optionId: second.id })).status).toBe(409);
+  });
+
+  it('finds yourVote regardless of how the username is capitalised', async () => {
+    const id = await createPoll();
+    const detail = await request(app).get(`/api/polls/${id}`);
+    const optionId = detail.body.options[0].id;
+
+    await request(app).post(`/api/polls/${id}/vote`).send({ username: 'Gal', optionId });
+
+    const res = await request(app).get(`/api/polls/${id}?username=GAL`);
+    expect(res.body.yourVote).toBe(optionId);
+  });
+
   it('rejects an option belonging to another poll', async () => {
     const pollA = await createPoll();
     const pollB = await createPoll({ question: 'A different question' });

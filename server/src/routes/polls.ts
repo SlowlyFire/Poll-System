@@ -125,7 +125,10 @@ pollsRouter.get('/:id', (req, res) => {
 
   // Which option this visitor picked, if any. Read from the database rather than
   // trusted from the client, so the answer is the same on any device or after a refresh.
-  const username = typeof req.query.username === 'string' ? req.query.username.trim() : '';
+  // Normalised the same way the vote endpoint does it (trim + lowercase). If these two
+  // ever disagreed, someone could vote as "Gal" and then be told they had not voted.
+  const username =
+    typeof req.query.username === 'string' ? req.query.username.trim().toLowerCase() : '';
   let yourVote: number | null = null;
   if (username) {
     // Returns the option this username voted for in this poll, if they voted at all.

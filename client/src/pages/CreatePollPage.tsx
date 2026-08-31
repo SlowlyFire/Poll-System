@@ -110,7 +110,14 @@ export default function CreatePollPage() {
         </button>
       )}
 
-      {error && <p className="error">{error}</p>}
+      {/* role="status" + aria-live means a screen reader announces the problem when it
+          appears. Without it, a blind user clicks Create, nothing seems to happen, and
+          the reason is sitting on screen unread. */}
+      {error && (
+        <p className="error" role="status" aria-live="polite">
+          {error}
+        </p>
+      )}
 
       {/* Disabled while the request is in flight so a double-click cannot create two polls. */}
       <button className="button button--primary" type="submit" disabled={submitting}>

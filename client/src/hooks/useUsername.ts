@@ -22,10 +22,15 @@ export function useUsername() {
   });
 
   function setUsername(next: string): void {
-    // Normalise once, here, so every part of the app sends the same string. Without the
-    // trim, " gal" and "gal" would be two different voters as far as the UNIQUE
-    // constraint is concerned, and one person could vote twice by adding a space.
-    const cleaned = next.trim();
+    // Normalise once, here, so every part of the app sends the same string. Without it,
+    // " gal", "gal" and "Gal" would be three different voters as far as the UNIQUE
+    // constraint is concerned, and adding a space or a capital letter would be an easy
+    // way to vote twice.
+    //
+    // The server applies exactly the same rule (see validation.ts) and is the one that
+    // actually enforces it — this copy just means the name shown on screen matches the
+    // name that gets stored, instead of the display quietly disagreeing with the data.
+    const cleaned = next.trim().toLowerCase();
     localStorage.setItem(STORAGE_KEY, cleaned);
     setUsernameState(cleaned);
   }

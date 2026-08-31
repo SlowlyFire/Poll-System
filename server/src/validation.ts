@@ -10,7 +10,20 @@ import { z } from 'zod';
 // Reusable pieces, so the same limits can't drift apart between endpoints.
 const username = z
   .string()
-  .trim()                      // " gal " and "gal" should be the same person
+  .trim()          // " gal " and "gal" must be the same person
+  // A DECISION, not an accident: usernames are compared case-insensitively, so "Gal"
+  // and "gal" are one voter. Without this, capitalising a letter is a trivial way to
+  // vote twice, which defeats the entire point of UNIQUE(poll_id, username).
+  //
+  // The cost is that we no longer remember how someone capitalised their own name —
+  // the poll says "created by gal" even if they typed "Gal". The alternative is to
+  // store the name as typed plus a normalised column to enforce uniqueness on. That is
+  // the right answer for a real product; here it is a second column and a second thing
+  // to keep in sync, in exchange for prettier capitalisation.
+  //
+  // Normalising on the SERVER, not just the client, is the part that matters: the
+  // client can be bypassed with curl, so this is where the rule actually holds.
+  .toLowerCase()
   .min(1, 'Username is required')
   .max(30, 'Username must be 30 characters or fewer');
 
