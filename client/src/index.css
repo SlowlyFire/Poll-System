@@ -1,14 +1,152 @@
-/* Global styles. One stylesheet for the whole app — no CSS framework, nothing to explain. */
+/* Every style in the app. One plain stylesheet — no framework, nothing to explain, and
+   the whole visual design fits on one screen. */
+
 :root {
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  color: #1a1a1a;
-  background: #f7f7f8;
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --text: #16181d;
+  --muted: #6b7280;
+  --border: #e3e6ea;
+  --accent: #2f6df6;
+  --accent-soft: #e8effe;
+  --danger: #c02626;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
 }
-body {
-  margin: 0;
-}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+
 main {
-  max-width: 640px;
+  max-width: 620px;
   margin: 0 auto;
-  padding: 32px 20px;
+  padding: 24px 20px 64px;
+}
+
+.header {
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+.header__title {
+  display: block;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  font-weight: 650;
+  color: var(--text);
+  text-decoration: none;
+}
+
+h1 { font-size: 22px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 0 0 4px; }
+.muted { color: var(--muted); font-size: 14px; margin: 4px 0 16px; }
+.error { color: var(--danger); font-size: 14px; margin: 12px 0; }
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.card--link { display: block; text-decoration: none; color: inherit; }
+.card--link:hover { border-color: var(--accent); }
+.card__title { margin: 0 0 2px; }
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 18px 0 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+.input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+.option-row { display: flex; gap: 8px; margin-bottom: 8px; }
+
+.button {
+  padding: 10px 16px;
+  font: inherit;
+  font-weight: 550;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.button:disabled { opacity: 0.5; cursor: not-allowed; }
+.button--primary { background: var(--accent); border-color: var(--accent); color: #fff; margin-top: 20px; }
+.button--ghost { color: var(--muted); }
+
+/* A choice you can click to vote for. */
+.option-button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  cursor: pointer;
+}
+.option-button:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+.option-button:disabled { opacity: 0.6; cursor: wait; }
+
+/* Results */
+.result { margin-bottom: 14px; }
+.result__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.result__text { font-weight: 550; }
+.result__count { color: var(--muted); white-space: nowrap; }
+.result--yours .result__text { color: var(--accent); }
+
+.badge {
+  margin-left: 8px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+.bar__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  /* Animates the bar when counts change after a vote, instead of jumping. */
+  transition: width 250ms ease;
 }
