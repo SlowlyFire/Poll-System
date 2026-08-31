@@ -1,0 +1,16 @@
+{
+  // TypeScript settings for the server. The client has its own tsconfig because
+  // it compiles for the browser, while this one compiles for Node.
+  "compilerOptions": {
+    "target": "ES2022",            // Node 22 supports modern JS, so no need to downlevel
+    "module": "ESNext",            // we use ES modules ("type": "module" in package.json)
+    "moduleResolution": "bundler", // lets us import "./db.js" style paths the way tsx expects
+    "outDir": "dist",              // `npm run build` compiles src/ -> dist/ for production
+    "rootDir": "src",
+    "strict": true,                // no implicit any; catches mistakes at compile time
+    "esModuleInterop": true,       // allows `import express from "express"` (a CommonJS package)
+    "skipLibCheck": true,          // don't type-check node_modules — much faster builds
+    "resolveJsonModule": true
+  },
+  "include": ["src"]
+}

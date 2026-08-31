@@ -1,0 +1,14 @@
+/* Global styles. One stylesheet for the whole app — no CSS framework, nothing to explain. */
+:root {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #1a1a1a;
+  background: #f7f7f8;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
