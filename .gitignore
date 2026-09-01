@@ -7,3 +7,6 @@ dist/
 .env
 .DS_Store
 _to_delete/
+
+# Vitest writes these temp configs next to vitest.config.ts and normally deletes them.
+*.timestamp-*.mjs
