@@ -4,7 +4,7 @@ A small polling app in the spirit of WhatsApp polls: anyone can create a poll wi
 options, share it as a link, and vote once. Results show live counts, percentages and a
 total. There is no sign-up — a voter just types a name.
 
-Live: _(add your Railway URL here)_
+Live: poll-system-production.up.railway.app
 
 ---
 
